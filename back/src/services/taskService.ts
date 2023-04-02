@@ -1,13 +1,18 @@
-import TaskEntity from "@database/entities/taskEntity";
-import { ITaskDTO } from "../database/dto/ITaskDTO";
+import TaskModel from "@database/models/taskModel";
 import TaskRepository from "../database/repositories/taskRepository";
 
 import AppError from "./AppError";
 
+interface Lista {
+    todo: TaskModel[];
+    doing: TaskModel[];
+    done: TaskModel[];
+}
+
 class TaskService {
     constructor(private taskRepository = new TaskRepository()) {}
 
-    public async create(data: ITaskDTO) {
+    public async create(data: TaskModel) {
         return await this.taskRepository.create(data);
     }
 
@@ -21,7 +26,7 @@ class TaskService {
         return await this.findAllTasks();
     }
 
-    public async update(id: string, data: ITaskDTO) {
+    public async update(id: string, data: TaskModel) {
         const task = await this.taskRepository.findById(id);
 
         if (!task) throw new AppError("Task não existe", 404);
@@ -41,8 +46,16 @@ class TaskService {
         return task;
     }
 
-    public async findAllTasks(): Promise<TaskEntity[]> {
-        return await this.taskRepository.findAllTasks();
+    public async findAllTasks(): Promise<Lista> {
+        const tasks = await this.taskRepository.findAllTasks();
+
+        const filteredTasks: Lista = {
+            todo: tasks.filter((tasks) => tasks.lista === "todo"),
+            doing: tasks.filter((tasks) => tasks.lista === "doing"),
+            done: tasks.filter((tasks) => tasks.lista === "done"),
+        };
+
+        return filteredTasks;
     }
 }
 

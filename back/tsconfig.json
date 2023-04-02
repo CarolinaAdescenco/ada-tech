@@ -3,10 +3,12 @@
         "target": "es5",
         "module": "commonjs",
         "strict": true,
+        "baseUrl": "./src/",
         "strictPropertyInitialization": false,
-        "baseUrl": "./src",
         "allowJs": true,
         "paths": {
+            "@config/*": ["config/*"],
+            "@controller/*": ["controller/*"],
             "@database/*": ["database/*"],
             "@modules/*": ["modules/*"],
             "@routes/*": ["routes/*"],

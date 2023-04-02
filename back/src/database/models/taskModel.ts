@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 
 @Entity("tasks")
-class TaskEntity {
+class TaskModel {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
@@ -18,14 +18,9 @@ class TaskEntity {
     conteudo: string;
 
     @Column({
-        default: "novo",
+        default: "todo",
     })
     lista: string;
-
-    @Column({
-        default: true,
-    })
-    ativo: boolean;
 
     @CreateDateColumn()
     data_criacao: Date;
@@ -34,4 +29,4 @@ class TaskEntity {
     data_atualizacao: Date;
 }
 
-export default TaskEntity;
+export default TaskModel;

@@ -2,33 +2,32 @@ import { Repository } from "typeorm";
 
 import connectDB from "../ormconfig";
 
-import TaskEntity from "../entities/taskEntity";
-import { ITaskDTO } from "@database/dto/ITaskDTO";
+import TaskModel from "../models/taskModel";
 
 class TaskRepository {
-    repository: Repository<TaskEntity>;
+    repository: Repository<TaskModel>;
 
     constructor() {
-        this.repository = connectDB.getRepository(TaskEntity);
+        this.repository = connectDB.getRepository(TaskModel);
     }
 
-    public async save(taskData: ITaskDTO): Promise<TaskEntity> {
+    public async save(taskData: TaskModel): Promise<TaskModel> {
         return await this.repository.save(taskData);
     }
 
-    public async create(taskData: ITaskDTO): Promise<TaskEntity> {
+    public async create(taskData: TaskModel): Promise<TaskModel> {
         const task = this.repository.create(taskData);
         await this.repository.save(task);
 
         return task;
     }
 
-    public async delete(id: string): Promise<TaskEntity | null> {
+    public async delete(id: string): Promise<TaskModel | null> {
         await this.repository.delete(id);
         return null;
     }
 
-    public async findById(id: string): Promise<TaskEntity | null> {
+    public async findById(id: string): Promise<TaskModel | null> {
         const task = await this.repository.findOne({
             where: { id },
         });
@@ -36,9 +35,8 @@ class TaskRepository {
         return task;
     }
 
-    public async findAllTasks(): Promise<TaskEntity[]> {
-        const tasks = await this.repository.find();
-        return tasks;
+    public async findAllTasks(): Promise<TaskModel[]> {
+        return await this.repository.find();
     }
 }
 
